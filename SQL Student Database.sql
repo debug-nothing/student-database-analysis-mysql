@@ -331,9 +331,92 @@ select min(Total_marks) as Minimum_marks from acadmic_info;
 select sum(Total_marks) as Total_marks from acadmic_info;
 
 -- 21. Find the average marks of male students. 
-select avg(a.total_marks) as average_marks
+select avg(a.total_marks) as ma_average_marks
 from personal_info as p inner join 
 acadmic_info as a 
 on p.student_id=a.student_id
 where gender="Male";
+
+-- 22. Find the average marks of female students
+select avg(a.total_marks) as fe_average_marks
+from personal_info as p inner join 
+acadmic_info as a 
+on p.student_id=a.student_id
+where gender="Female";
+
+-- 23. Count the number of students in each city. 
+select count(*) as no_of_student,p.city
+from personal_info as p inner join acadmic_info as a
+on p.student_Id=a.student_id
+group by city;
+
+-- 24. Count the number of male and female students. 
+select gender, count(*) as gender_wise_studet
+from personal_info
+group by gender;
+
+-- 25. Count students according to their year of birth. 
+select year(DOB) as dob_year,count(*) as no_of_student
+from personal_info 
+group by year(DOB)
+order by dob_year ASC;
+
+-- 26. Find the average marks for each class.
+select avg(Total_Marks) as avg_marks, class
+from acadmic_info
+group by class;
+
+-- 27. Find the highest marks in each class. 
+select max(Total_Marks) as Highest_marks, class
+from acadmic_info
+group by class;
+
+-- 28. Find the lowest marks in each class. 
+select min(Total_Marks) as Lowest_marks, class
+from acadmic_info
+group by class;
+
+-- 29. Find the number of students in each class. 
+select count(*) as number_of_student, Class
+from personal_info as p inner join acadmic_info as a
+on p.student_ID=a.student_ID
+group by class;
+
+-- 30. Find the average marks for each city. 
+select avg(total_marks)as avg_marks,city
+from personal_info as p inner join acadmic_info as a
+on p.student_ID=a.student_ID
+group by city;
+
+-- 31. Display only those cities having more than 10 students. 
+select city,count(*) as no_of_student
+from personal_info
+group by city
+having count(*) > 10;
+
+-- 32. Display classes having an average score greater than 400
+select avg(total_marks),class
+from acadmic_info
+group by class
+having avg(total_marks) > 400;
+
+-- 33. Display years of birth having more than 30 students.
+select year(dob) as year_of_birth, count(*) as No_Of_Student
+from personal_info
+group by year(dob)
+having count(*) > 30;
+
+-- 34. Display cities where the average marks are greater than 400. 
+select city, avg(total_marks) as avg_400
+from personal_info as p 
+inner join
+acadmic_info as a
+on p.student_id = a.student_id
+group by city
+having avg(total_marks) > 400;
 */
+-- 35. Display gender groups having more than 40 students. 
+select gender, count(*) 
+from personal_info 
+group by gender
+having count(*) > 40;
