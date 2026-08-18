@@ -414,9 +414,103 @@ acadmic_info as a
 on p.student_id = a.student_id
 group by city
 having avg(total_marks) > 400;
-*/
+
 -- 35. Display gender groups having more than 40 students. 
 select gender, count(*) 
 from personal_info 
 group by gender
 having count(*) > 40;
+
+-- 36. Display student name, gender, city, class, roll number, and total marks. 
+
+select p.Student_Name,p.Gender,p.city,a.class, a.Roll_no, a.total_marks
+from personal_info as p 
+inner join 
+acadmic_info as a 
+on p.Student_id=a.Student_ID;
+
+-- 37. Display all female students along with their academic information. 
+select p.Student_Name,p.Gender, a.*
+from personal_info as p 
+inner join 
+acadmic_info as a 
+on p.Student_id=a.Student_ID
+where gender = "Female";
+
+-- 38. Display students from Malegaon along with their marks. 
+select p.student_Name, p.city, a.total_marks
+from personal_info as p
+inner join
+acadmic_info as a
+on p.student_id=a.student_Id
+where city = "Malegaon";
+
+-- 39. Display students who scored more than 400 marks along with their personal details.
+select p.*,a.Total_marks
+from personal_info as p
+inner join
+acadmic_info as a
+on p.Student_Id=a.student_id
+where a.total_marks < 400;
+
+-- 40. Display the names and marks of students from Mumbai
+select p.student_name,a.total_marks,p.city
+from personal_info as p 
+inner join 
+acadmic_info as a
+on p.student_id=a.student_id
+where p.city="Mumbai";
+
+-- 41. Display student name, city, class, and marks for students from Pune. 
+select p.student_name, p.city, a.class, a.total_marks
+from personal_info as p 
+inner join 
+acadmic_info as a 
+on p.student_Id=a.student_Id
+where p.city="Pune";
+
+-- 42. Display students whose marks are between 350 and 450 along with their personal information. 
+select p.*, a.Total_marks
+from personal_info as p 
+inner join 
+acadmic_info as a 
+on p.student_Id=a.student_Id
+where a.total_marks between 350 AND 450;
+
+-- 43. Use a LEFT JOIN to display all students from personal_info along with their academic information
+select p.*, a.*
+from personal_info as p 
+left join
+acadmic_info as a 
+on p.student_Id=a.student_Id;
+
+-- 44. Display all students from the personal information table, even if academic information is not available
+select p.*, a.*
+from personal_info as p 
+left join
+acadmic_info as a 
+on p.student_Id=a.student_Id;
+
+-- 45. Find students who do not have matching academic records. 
+select p.*, a.*
+from personal_info as p 
+left join
+acadmic_info as a
+on p.student_Id=a.student_Id
+where a.student_Id IS Null;
+
+-- 46. Use a RIGHT JOIN to display all academic records along with the corresponding student information. 
+select p.*, a.*
+from personal_info as p 
+Right join
+acadmic_info as a
+on p.student_Id=a.student_Id;
+
+-- 47. Find academic records for which matching personal information is not available. 
+select p.*, a.*
+from personal_info as p 
+Right join
+acadmic_info as a
+on p.student_Id=a.student_Id
+where p.student_Id IS Null;
+*/
