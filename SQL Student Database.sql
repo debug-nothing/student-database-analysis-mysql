@@ -513,4 +513,130 @@ Right join
 acadmic_info as a
 on p.student_Id=a.student_Id
 where p.student_Id IS Null;
+
+-- 48. Create a performance category using the following rules: 
+select roll_no,total_marks,
+       case  
+             when total_marks >= 450 then "A"
+			 when total_marks >= 400 then "B"
+			 when total_marks >= 350 then "C"
+			 else "D"
+	    End as Performance_Category
+        from acadmic_info;
+
+-- 49. Display student name, total marks, and grade
+select total_marks, student_name, 
+ case  
+             when total_marks >= 450 then "A"
+			 when total_marks >= 400 then "B"
+			 when total_marks >= 350 then "C"
+			 else "D"
+	    End as Grade
+        from acadmic_info as a 
+        inner join 
+        personal_info as p
+        on a.student_Id=p.student_id;
+
+-- 50. Count how many students belong to each grade. 
+select
+	case  
+		when total_marks >= 450 then "A"
+		when total_marks >= 400 then "B"
+		when total_marks >= 350 then "C"
+		else "D"
+	End as Grade,
+    count(*) as total_Count
+from acadmic_info 
+group by grade;
+
+-- 51. Find the number of female students in each grade
+select
+	case  
+		when total_marks >= 450 then "A"
+		when total_marks >= 400 then "B"
+		when total_marks >= 350 then "C"
+		else "D"
+	End as Grade,
+    count(*) as Female_Count
+from acadmic_info as a 
+inner join 
+personal_info as p
+on a.Student_id=p.Student_id
+where gender="Female"
+group by grade;
+
+-- 52. Find the number of male students in each grade. 
+select
+	case  
+		when total_marks >= 450 then "A"
+		when total_marks >= 400 then "B"
+		when total_marks >= 350 then "C"
+		else "D"
+	End as Grade,
+    count(*) as Male_Count
+from acadmic_info as a 
+inner join 
+personal_info as p
+on a.Student_id=p.Student_id
+where gender="Male"
+group by grade;
+
+-- 53. Display students with their grade and city. 
+select student_name,city,
+	case  
+		when total_marks >= 450 then "A"
+		when total_marks >= 400 then "B"
+		when total_marks >= 350 then "C"
+		else "D"
+	End as Grade
+from acadmic_info as a 
+inner join 
+personal_info as p
+on a.Student_id=p.Student_id;
+
+-- 54. Display student name, date of birth, year of birth, and status. 
+select student_name,Date(DOB) as date_of_birth,year(DOB) as year_of_birth,
+   case
+        when year(DOB)=2005 then "Fresher"
+        when year(DOB)=2006 then "Repeater"
+        else "X Repeater"
+   End as Status
+from personal_info;
+
+-- 55. Count students in each status category
+select
+   case YEAR(DOB)
+        when 2005 then "Fresher"
+        when 2006 then "Repeater"
+        else "X Repeater"
+   End as Status,
+   count(*) as status_category
+from personal_info
+group by status;
+
+-- 56. Find the number of Fresh, Repeater, and X Repeater students in each city. 
+select city,
+   case YEAR(DOB)
+        when 2005 then "Fresher"
+        when 2006 then "Repeater"
+        else "X Repeater"
+   End as Status,
+   count(*) as status_category
+from personal_info
+group by city, status;
+
+-- 57. Find the average marks of each status category
+select avg(Total_marks),
+   case YEAR(DOB)
+        when 2005 then "Fresher"
+        when 2006 then "Repeater"
+        else "X Repeater"
+   End as Status,
+   count(*) as status_category
+from personal_info as p
+inner join 
+acadmic_info as a
+on a.student_id=p.student_id
+group by status;
 */
+-- 58. Display the names of female students from Mumbai and classify them according to their marks. 
