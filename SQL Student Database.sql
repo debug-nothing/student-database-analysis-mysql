@@ -638,5 +638,176 @@ inner join
 acadmic_info as a
 on a.student_id=p.student_id
 group by status;
-*/
+
 -- 58. Display the names of female students from Mumbai and classify them according to their marks. 
+
+SELECT 
+    p.Student_Name,
+    p.Gender,
+    p.City,
+    a.Total_Marks,
+    CASE  
+        WHEN a.Total_Marks >= 450 THEN 'A'
+        WHEN a.Total_Marks >= 400 THEN 'B'
+        WHEN a.Total_Marks >= 350 THEN 'C'
+        ELSE 'D'
+    END AS Performance_Category
+FROM Personal_info AS p
+INNER JOIN Acadmic_info AS a
+    ON p.Student_ID = a.Student_ID
+WHERE p.Gender = 'Female' 
+  AND p.City = 'Mumbai';
+  
+  -- 59. Display male students from Malegaon who scored more than 400 marks and show their performance grade. 
+  SELECT 
+    p.Student_Name,
+    p.Gender,
+    p.City,
+    a.Total_Marks,
+    CASE  
+        WHEN a.Total_Marks >= 450 THEN 'A'
+        WHEN a.Total_Marks >= 400 THEN 'B'
+        WHEN a.Total_Marks >= 350 THEN 'C'
+        ELSE 'D'
+    END AS Grade
+FROM Personal_info AS p
+INNER JOIN Acadmic_info AS a ON p.Student_ID = a.Student_ID
+
+-- 60. Display female students from Pune with their class, marks, and performance grade.
+SELECT 
+    p.Student_Name,
+    p.Gender,
+    p.City,
+    a.Class,
+    a.Total_Marks,
+    CASE  
+        WHEN a.Total_Marks >= 450 THEN 'A'
+        WHEN a.Total_Marks >= 400 THEN 'B'
+        WHEN a.Total_Marks >= 350 THEN 'C'
+        ELSE 'D'
+    END AS Grade
+FROM Personal_info AS p
+INNER JOIN Acadmic_info AS a ON p.Student_ID = a.Student_ID
+WHERE p.Gender = 'Female' AND p.City = 'Pune';
+
+-- 61. Display students from Nashik with their year-of-birth status and academic grade.
+SELECT 
+    p.Student_Name,
+    p.City,
+    YEAR(p.DOB) AS Birth_Year,
+    CASE YEAR(p.DOB)
+        WHEN 2005 THEN 'Fresher'
+        WHEN 2006 THEN 'Repeater'
+        ELSE 'X Repeater'
+    END AS DOB_Status,
+    a.Total_Marks,
+    CASE  
+        WHEN a.Total_Marks >= 450 THEN 'A'
+        WHEN a.Total_Marks >= 400 THEN 'B'
+        WHEN a.Total_Marks >= 350 THEN 'C'
+        ELSE 'D'
+    END AS Grade
+FROM Personal_info AS p
+INNER JOIN Acadmic_info AS a ON p.Student_ID = a.Student_ID
+WHERE p.City = 'Nashik';
+
+-- 62. Find female students from Mumbai and show the number of students in each performance grade.
+SELECT 
+    CASE  
+        WHEN a.Total_Marks >= 450 THEN 'A'
+        WHEN a.Total_Marks >= 400 THEN 'B'
+        WHEN a.Total_Marks >= 350 THEN 'C'
+        ELSE 'D'
+    END AS Grade,
+    COUNT(*) AS Female_Count
+FROM Personal_info AS p
+INNER JOIN Acadmic_info AS a ON p.Student_ID = a.Student_ID
+WHERE p.Gender = 'Female' AND p.City = 'Mumbai'
+GROUP BY 
+    CASE  
+        WHEN a.Total_Marks >= 450 THEN 'A'
+        WHEN a.Total_Marks >= 400 THEN 'B'
+        WHEN a.Total_Marks >= 350 THEN 'C'
+        ELSE 'D'
+    END;
+    
+-- 63. Find the average marks of male and female students.
+SELECT 
+    p.Gender,
+    AVG(a.Total_Marks) AS Avg_Marks
+FROM Personal_info AS p
+INNER JOIN Acadmic_info AS a ON p.Student_ID = a.Student_ID
+GROUP BY p.Gender;
+
+-- 64. Find the average marks of students in each city.
+SELECT 
+    p.City,
+    AVG(a.Total_Marks) AS Avg_Marks
+FROM Personal_info AS p
+INNER JOIN Acadmic_info AS a ON p.Student_ID = a.Student_ID
+GROUP BY p.City;
+
+-- 65. Find the number of students in each city and gender combination.
+SELECT 
+    p.City,
+    p.Gender,
+    COUNT(DISTINCT p.Student_ID) AS Student_Count
+FROM Personal_info AS p
+INNER JOIN Acadmic_info AS a ON p.Student_ID = a.Student_ID
+GROUP BY p.City, p.Gender;
+
+-- 66. Find the average marks for each class and gender.
+SELECT 
+    a.Class,
+    p.Gender,
+    AVG(a.Total_Marks) AS Avg_Marks
+FROM Personal_info AS p
+INNER JOIN Acadmic_info AS a ON p.Student_ID = a.Student_ID
+GROUP BY a.Class, p.Gender;
+
+-- 67. Find the highest marks obtained by male and female students in each city.
+SELECT 
+    p.City,
+    p.Gender,
+    MAX(a.Total_Marks) AS Highest_Marks
+FROM Personal_info AS p
+INNER JOIN Acadmic_info AS a ON p.Student_ID = a.Student_ID
+GROUP BY p.City, p.Gender;
+
+-- 68. Find the number of students in each city who scored more than 400 marks.
+SELECT 
+    p.City,
+    COUNT(*) AS High_Scorers_Count
+FROM Personal_info AS p
+INNER JOIN Acadmic_info AS a ON p.Student_ID = a.Student_ID
+WHERE a.Total_Marks > 400
+GROUP BY p.City;
+
+-- 69. Find the number of students in each performance grade for every city.
+SELECT 
+    p.City,
+    CASE  
+        WHEN a.Total_Marks >= 450 THEN 'A'
+        WHEN a.Total_Marks >= 400 THEN 'B'
+        WHEN a.Total_Marks >= 350 THEN 'C'
+        ELSE 'D'
+    END AS Grade,
+    COUNT(*) AS Student_Count
+FROM Personal_info AS p
+INNER JOIN Acadmic_info AS a ON p.Student_ID = a.Student_ID
+GROUP BY p.City, Grade;
+
+-- 70. Find the number of female students from Mumbai in each performance grade.
+SELECT 
+    CASE  
+        WHEN a.Total_Marks >= 450 THEN 'A'
+        WHEN a.Total_Marks >= 400 THEN 'B'
+        WHEN a.Total_Marks >= 350 THEN 'C'
+        ELSE 'D'
+    END AS Grade,
+    COUNT(*) AS Female_Mumbai_Count
+FROM Personal_info AS p
+INNER JOIN Acadmic_info AS a ON p.Student_ID = a.Student_ID
+WHERE p.Gender = 'Female' AND p.City = 'Mumbai'
+GROUP BY Grade;
+*/
