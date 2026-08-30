@@ -917,4 +917,199 @@ INNER JOIN Acadmic_info AS a ON p.Student_ID = a.Student_ID
 WHERE p.Gender = 'Female' AND p.City = 'Mumbai'
 GROUP BY Grade
 HAVING COUNT(*) >= 2;
+*//*
+-- Query 1 — Complete Student Report (Final Challenge)
+SELECT 
+    p.Student_ID,
+    p.Student_Name,
+    p.Gender,
+    p.City,
+    p.DOB AS Date_Of_Birth,
+    YEAR(p.DOB) AS Year_Of_Birth,
+    CASE YEAR(p.DOB)
+        WHEN 2005 THEN 'Fresher'
+        WHEN 2006 THEN 'Repeater'
+        ELSE 'X Repeater'
+    END AS DOB_Status,
+    a.Roll_No,
+    a.Class,
+    a.Total_Marks,
+    CASE 
+        WHEN a.Total_Marks >= 450 THEN 'A'
+        WHEN a.Total_Marks >= 400 THEN 'B'
+        WHEN a.Total_Marks >= 350 THEN 'C'
+        ELSE 'D'
+    END AS Performance_Grade
+FROM Personal_info AS p
+INNER JOIN Acadmic_info AS a 
+    ON p.Student_ID = a.Student_ID
+WHERE a.Total_Marks >= 200
+GROUP BY 
+    p.Student_ID, 
+    p.Student_Name, 
+    p.Gender, 
+    p.City, 
+    p.DOB, 
+    a.Roll_No, 
+    a.Class, 
+    a.Total_Marks
+HAVING COUNT(a.Roll_No) >= 1;
+
+-- Query 2 — Summary Report (City + Gender + Class + Grade)
+SELECT 
+    p.City,
+    p.Gender,
+    a.Class,
+    CASE 
+        WHEN a.Total_Marks >= 450 THEN 'A'
+        WHEN a.Total_Marks >= 400 THEN 'B'
+        WHEN a.Total_Marks >= 350 THEN 'C'
+        ELSE 'D'
+    END AS Performance_Grade,
+    COUNT(DISTINCT a.Roll_No) AS Total_Students,
+    AVG(a.Total_Marks) AS Avg_Marks
+FROM Personal_info AS p
+INNER JOIN Acadmic_info AS a 
+    ON p.Student_ID = a.Student_ID
+GROUP BY 
+    p.City, 
+    p.Gender, 
+    a.Class, 
+    Performance_Grade
+ORDER BY 
+    p.City, 
+    p.Gender, 
+    a.Class, 
+    Performance_Grade;
+    
+    SELECT
+    p.Student_ID,
+    p.Student_Name,
+    p.Gender,
+    p.City,
+    p.DOB AS Date_of_Birth,
+
+    YEAR(p.DOB) AS Year_of_Birth,
+
+    CASE
+        WHEN YEAR(p.DOB) = 2005 THEN 'Fresh'
+        WHEN YEAR(p.DOB) = 2006 THEN 'Repeater'
+        WHEN YEAR(p.DOB) = 2007 THEN 'X Repeater'
+        ELSE 'Other'
+    END AS Year_Birth_Status,
+
+    a.Roll_No,
+    a.Class,
+    a.Total_Marks,
+
+    CASE
+        WHEN a.Total_Marks >= 450 THEN 'Grade A'
+        WHEN a.Total_Marks BETWEEN 400 AND 449 THEN 'Grade B'
+        WHEN a.Total_Marks BETWEEN 350 AND 399 THEN 'Grade C'
+        ELSE 'Grade D'
+    END AS Performance_Grade,
+
+FROM Personal_info p
+INNER JOIN Acadmic_info a
+ON p.Student_ID = a.Student_ID
+
+WHERE a.Total_Marks IS NOT NULL
+ORDER BY a.Total_Marks DESC;
+
+SELECT
+    p.City,
+    p.Gender,
+    a.Class,
+
+    CASE
+        WHEN a.Total_Marks >= 450 THEN 'Grade A'
+        WHEN a.Total_Marks BETWEEN 400 AND 449 THEN 'Grade B'
+        WHEN a.Total_Marks BETWEEN 350 AND 399 THEN 'Grade C'
+        ELSE 'Grade D'
+    END AS Performance_Grade,
+
+    COUNT(*) AS Number_of_Students,
+
+    AVG(a.Total_Marks) AS Average_Marks,
+    MAX(a.Total_Marks) AS Highest_Marks,
+    MIN(a.Total_Marks) AS Lowest_Marks
+
+FROM Personal_info p
+INNER JOIN Acadmic_info a
+ON p.Student_ID = a.Student_ID
+
+GROUP BY
+    p.City,
+    p.Gender,
+    a.Class,
+    Performance_Grade
+
+HAVING COUNT(*) >= 1
+
+ORDER BY
+    p.City,
+    a.Class,
+    Performance_Grade;
+    
+-- Query 3 — Grand Summary Report (Overall Statistics)
+    SELECT
+    COUNT(DISTINCT p.Student_ID) AS Total_Students,
+    COUNT(a.Roll_No) AS Academic_Records,
+    AVG(a.Total_Marks) AS Overall_Average_Marks,
+    MAX(a.Total_Marks) AS Highest_Marks,
+    MIN(a.Total_Marks) AS Lowest_Marks,
+    SUM(a.Total_Marks) AS Total_Marks_Obtained
+FROM Personal_info p
+INNER JOIN Acadmic_info a
+ON p.Student_ID = a.Student_ID;
+
+-- Query 4 — City-wise Student Summary
+SELECT
+    p.City,
+    COUNT(*) AS Total_Students,
+    ROUND(AVG(a.Total_Marks),2) AS Average_Marks,
+    MAX(a.Total_Marks) AS Highest_Marks,
+    MIN(a.Total_Marks) AS Lowest_Marks
+FROM Personal_info p
+INNER JOIN Acadmic_info a
+ON p.Student_ID = a.Student_ID
+GROUP BY p.City
+HAVING COUNT(*) > 2
+ORDER BY Average_Marks DESC;
+
+-- Query 5 — Performance Grade Summary
+SELECT
+    CASE
+        WHEN Total_Marks >= 450 THEN 'Grade A'
+        WHEN Total_Marks BETWEEN 400 AND 449 THEN 'Grade B'
+        WHEN Total_Marks BETWEEN 350 AND 399 THEN 'Grade C'
+        ELSE 'Grade D'
+    END AS Performance_Grade,
+
+    COUNT(*) AS Total_Students,
+    ROUND(AVG(Total_Marks),2) AS Average_Marks
+
+FROM Acadmic_info
+GROUP BY Performance_Grade
+ORDER BY Average_Marks DESC;
+
+-- Query 6 — Year-of-Birth Status Summary
+SELECT
+    CASE
+        WHEN YEAR(p.DOB) = 2005 THEN 'Fresh'
+        WHEN YEAR(p.DOB) = 2006 THEN 'Repeater'
+        WHEN YEAR(p.DOB) = 2007 THEN 'X Repeater'
+        ELSE 'Other'
+    END AS Year_Status,
+
+    COUNT(*) AS Students,
+    ROUND(AVG(a.Total_Marks),2) AS Average_Marks
+
+FROM Personal_info p
+INNER JOIN Acadmic_info a
+ON p.Student_ID = a.Student_ID
+
+GROUP BY Year_Status
+HAVING COUNT(*) > 0
+ORDER BY Students DESC;
 */
